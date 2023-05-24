@@ -5,6 +5,10 @@ const app = express();
 
 const port = 3000;
 
+//view dynamically created content
+app.set('views', path.join(__dirname, 'views')); 
+app.set('view engine', 'ejs'); 
+
 //access to static css, js files
 app.use(express.static('public'));
 //post data: look to incomming request and extract incomming data
@@ -14,23 +18,19 @@ app.use(express.urlencoded({ extended: false }));
 app.set('views', path.join(__dirname, 'views')); 
 
 app.get('/', (req, res) => {
-    const htmlFilepath = path.join(__dirname, 'views', 'index.html');
-    res.sendFile(htmlFilepath);
+    res.render('index'); //render index.ejs and convert to index.html to be usable in browser
 });
 
 app.get('/about', (req, res) => {
-    const htmlFilepath = path.join(__dirname, 'views', 'about.html');
-    res.sendFile(htmlFilepath);
+    res.render('about');
 });
 
 app.get('/confirm', (req, res) => {
-    const htmlFilepath = path.join(__dirname, 'views', 'confirm.html');
-    res.sendFile(htmlFilepath);
+    res.render('confirm');
 });
 
 app.get('/recommend', (req, res) => {
-    const htmlFilepath = path.join(__dirname, 'views', 'recommend.html');
-    res.sendFile(htmlFilepath);
+    res.render('recommend');
 });
 
 // post form data
@@ -48,8 +48,7 @@ app.post('/recommend', (req, res) => {
 });
 
 app.get('/restaurants', (req, res) => {
-    const htmlFilepath = path.join(__dirname, 'views', 'restaurants.html');
-    res.sendFile(htmlFilepath);
+    res.render('restaurants');
 });
 
 
