@@ -77,6 +77,12 @@ app.get('/restaurants/:id', (req, res) => {
             });
         };
     };
+
+    res.render('404');
 });
+
+app.use((req, res) => {
+    res.render('404');
+})
 
 app.listen(port, () => {});
