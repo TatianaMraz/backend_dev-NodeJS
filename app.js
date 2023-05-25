@@ -78,15 +78,15 @@ app.get('/restaurants/:id', (req, res) => {
         };
     };
 
-    res.render('404');
+    res.status(404).render('404');
 });
 
 app.use((req, res) => {
-    res.render('404'); //client side error, requested URL was not found
+    res.status(404).render('404'); //client side error, requested URL was not found
 })
 
 app.use((error, req, res, next) => {
-    res.render('500'); //server side error, request is valid but cannot be generated
+    res.status(500).render('500'); //server side error, request is valid but cannot be generated
 })
 
 app.listen(port, () => {});
