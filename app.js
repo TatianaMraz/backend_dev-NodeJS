@@ -1,7 +1,11 @@
 const fs = require('fs'); //to open files
 const path = require('path');
+
 const express = require('express');
 const uuid = require('uuid'); //uniqe ID generator
+
+const restaurantData = require('./utility/restaurant-data'); //required to have access to js files
+
 const app = express();
 
 const port = 3000;
@@ -38,14 +42,12 @@ app.get('/recommend', (req, res) => {
 app.post('/recommend', (req, res) => {
     const restaurant = req.body;
     restaurant.id = uuid.v4(); //for ID generator
-    const filePath = path.join(__dirname, 'data', 'restaurants.json');
+    const restaurants = restaurantData.getStoredRestaurants();   
+
+    restaurants.push(restaurant); //push data from html form to array to restaurants.json
     
-    const fileData = fs.readFileSync(filePath); //read data from restaurants.json
-    const storedRestaurants = JSON.parse(fileData); //parse data from array from restaurants.json
-    
-    storedRestaurants.push(restaurant); //push data from html form to array to restaurants.json
-    fs.writeFileSync(filePath, JSON.stringify(storedRestaurants)); //save to restaurants.json
-    
+    restaurantData.storedRestaurants(restaurants);
+
     res.redirect('/confirm'); //save data to confirm.html
 });
 
