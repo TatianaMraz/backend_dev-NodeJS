@@ -1,6 +1,7 @@
 const fs = require('fs'); //to open files
 const path = require('path');
 const express = require('express');
+const uuid = require('uuid'); //uniqe ID generator
 const app = express();
 
 const port = 3000;
@@ -36,6 +37,7 @@ app.get('/recommend', (req, res) => {
 // post form data
 app.post('/recommend', (req, res) => {
     const restaurant = req.body;
+    restaurant.id = uuid.v4(); //for ID generator
     const filePath = path.join(__dirname, 'data', 'restaurants.json');
     
     const fileData = fs.readFileSync(filePath); //read data from restaurants.json
@@ -59,5 +61,22 @@ app.get('/restaurants', (req, res) => {
     });
 });
 
+//getting the child routes
+app.get('/restaurants/:id', (req, res) => {
+    const restaurantId = req.params.id;
+    const filePath = path.join(__dirname, 'data', 'restaurants.json');
+    
+    const fileData = fs.readFileSync(filePath); //read data from restaurants.json
+    const storedRestaurants = JSON.parse(fileData); //parse data from array from restaurants.json
+    
+    //look for specific restaurant of the array of restaurants
+    for (const restaurant of storedRestaurants){
+        if (restaurant.id === restaurantId){
+            return res.render('restaurant-detail', { 
+                restaurant: restaurant
+            });
+        };
+    };
+});
 
 app.listen(port, () => {});
