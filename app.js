@@ -48,7 +48,14 @@ app.post('/recommend', (req, res) => {
 });
 
 app.get('/restaurants', (req, res) => {
-    res.render('restaurants');
+    const filePath = path.join(__dirname, 'data', 'restaurants.json');
+
+    const fileData = fs.readFileSync(filePath); //read data from restaurants.json
+    const storedRestaurants = JSON.parse(fileData); //parse data from array from restaurants.json
+
+    res.render('restaurants', { 
+        numberOfRestaurants: storedRestaurants.length, //data from restaurant.json
+    });
 });
 
 
