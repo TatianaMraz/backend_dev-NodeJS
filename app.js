@@ -82,7 +82,11 @@ app.get('/restaurants/:id', (req, res) => {
 });
 
 app.use((req, res) => {
-    res.render('404');
+    res.render('404'); //client side error, requested URL was not found
+})
+
+app.use((error, req, res, next) => {
+    res.render('500'); //server side error, request is valid but cannot be generated
 })
 
 app.listen(port, () => {});
