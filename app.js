@@ -55,6 +55,7 @@ app.get('/restaurants', (req, res) => {
 
     res.render('restaurants', { 
         numberOfRestaurants: storedRestaurants.length, //data from restaurant.json
+        restaurants: storedRestaurants //data from restaurant.json
     });
 });
 
