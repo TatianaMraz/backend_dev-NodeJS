@@ -2,6 +2,7 @@ const express = require('express');
 const uuid = require('uuid'); //uniqe ID generator
 
 const restaurantData = require('../utility/restaurant-data');
+const { restart } = require('nodemon');
 const router = express.Router();
 
 router.get('/confirm', (req, res) => {
@@ -27,11 +28,32 @@ router.post('/recommend', (req, res) => {
 
 
 router.get('/restaurants', (req, res) => {
-    const storedRestaurants = restaurantData.getStoredRestaurants();   
+    let order = req.query.order; //check if URL has a query parameter (key=order)
+    let nextOrder = 'desc';
+
+    if (order !== 'asc' && order !== 'desc') {
+        order = 'asc';
+    } 
+
+    if (order == 'desc') {
+        nextOrder = 'asc';
+    } 
+
+    const storedRestaurants = restaurantData.getStoredRestaurants(); 
+    
+    // sort data based on the name
+    storedRestaurants.sort((restaurantA, restaurantB) => {
+        if ((order == 'asc' && restaurantA.name > restaurantB.name) || (order == 'desc' && restaurantB.name > restaurantA.name)) {
+            return 1
+        }
+
+        return -1
+    });
 
     res.render('restaurants', { 
         numberOfRestaurants: storedRestaurants.length, //data from restaurant.json
-        restaurants: storedRestaurants //data from restaurant.json
+        restaurants: storedRestaurants, //data from restaurant.json
+        nextOrder: nextOrder
     });
 });
 
